@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_opitemp/templates *
+recursive-include octoprint_opitemp/translations *
+recursive-include octoprint_opitemp/static *
