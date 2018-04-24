@@ -5,6 +5,7 @@ import octoprint.plugin
 import sys
 import re
 from octoprint.util import RepeatedTimer
+import platform
 
 class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                     octoprint.plugin.StartupPlugin,
@@ -29,7 +30,14 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
             p = run("cat /etc/armbianmonitor/datasources/soctemp", stdout=Capture())
             p = p.stdout.text
             match = re.search('(\d+)', p)
-            self.temp = "{0:.1f}".format(float(match.group(1))/1000)
+            # lazy fix for #3, yeah I known...
+            if platform.release().startswith("4"):
+                self.temp = "{0:.1f}".format(float(match.group(1))/1000)
+            elif platform.release().startswith("3"):
+                self.temp = match.group(1)
+            else :
+                self._logger.warning("OpiTemp: unknown kernel version!")
+                self.temp = 0
             self._plugin_manager.send_plugin_message(self._identifier,
                                                      dict(soctemp=self.temp))
             self._logger.debug("OpiTemp REFRESH")
