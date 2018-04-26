@@ -11,7 +11,7 @@ $(function() {
             if (plugin != "opitemp") {
                 return;
             }
-            text = "&#127818;" + data.soctemp+ "&#8451;";
+            text = data.emoji + data.soctemp+ "&#8451;";
             self.Temp(text);
         };
     }

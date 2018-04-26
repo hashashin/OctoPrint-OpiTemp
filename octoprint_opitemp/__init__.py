@@ -13,16 +13,23 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                     octoprint.plugin.TemplatePlugin):
     temp = 0
 
+    def get_settings_defaults(self):
+        return dict(rate="10.0",
+                    emoji="&#127818;")
+
+    def interval(self):
+        return float(self._settings.get(["rate"]))
+
     def on_after_startup(self):
-        t = RepeatedTimer(10.0, self.check_temp)
+        t = RepeatedTimer(self.interval, self.check_temp)
         t.start()
         self._logger.info("OpiTemp READY")
 
-    def get_template_vars(self):
-        return dict(soctemp=self.temp)
-
-    def get_settings_defaults(self):
-        return dict(type="navbar", custom_bindings=True)
+    def get_template_configs(self):
+        return [
+                dict(type="navbar", custom_bindings=True),
+                dict(type="settings", custom_bindings=False)
+        ]
 
     def check_temp(self):
         from sarge import run, Capture
@@ -39,7 +46,8 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                 self._logger.warning("OpiTemp: unknown kernel version!")
                 self.temp = 0
             self._plugin_manager.send_plugin_message(self._identifier,
-                                                     dict(soctemp=self.temp))
+                                                     dict(soctemp=self.temp,emoji=self._settings.get(["emoji"]))
+                                                    )
             self._logger.debug("OpiTemp REFRESH")
         except Exception as e:
             self._logger.warning("OpiTemp REFRESH FAILED: %s" % e)
