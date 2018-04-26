@@ -1,14 +1,31 @@
+<h4 class="help-inline">Basic config</h4>
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.rate"><span class="help-inline">Refresh rate in seconds</span>
+            <input type="text" data-bind="value: settings.plugins.opitemp.rate"><span class="help-inline">Refresh rate in seconds.</span>
         </div>
     </div>
 </form>
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.emoji"><span class="help-inline">HTML emoji code to use as icon</span>
+            <input type="text" data-bind="value: settings.plugins.opitemp.emoji"><span class="help-inline">HTML emoji code to use as icon.</span>
         </div>
+    </div>
+</form>
+<h4 class="help-inline">Threshold config</h4>
+<form class="form-horizontal">
+    <div class="control-group">
+        <div class="controls">
+            <input type="text" data-bind="value: settings.plugins.opitemp.tsp1"><span class="help-inline">Temperature below this value it's considered OK=>green color.</span>
+        </div>
+    </div>
+</form>
+<form class="form-horizontal">
+    <div class="control-group">
+        <div class="controls">
+            <input type="text" data-bind="value: settings.plugins.opitemp.tsp2"><span class="help-inline">Temperature adobe this value it's considered NOT OK=>red color.</span>
+        </div>
+        <h6 class="help-inline">Anything in between those values it's showed in orange color.</h6>
     </div>
 </form>

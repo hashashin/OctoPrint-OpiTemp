@@ -17,7 +17,9 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
     def get_settings_defaults(self):
         return dict(rate="10.0",
                     emoji="&#127818;",
-                    color=self.color)
+                    color=self.color,
+                    tsp1=50,
+                    tsp2=65)
 
     def interval(self):
         return float(self._settings.get(["rate"]))
@@ -35,11 +37,13 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
 
     def set_text_color(self):
         t = float(self.temp)
-        if t < 51:
+        tsp1= float(self._settings.get(["tsp1"]))
+        tsp2= float(self._settings.get(["tsp2"]))
+        if t < tsp1:
             self.color = "green"
-        elif t >= 51 and t < 65:
+        elif t >= tsp1 and t < tsp2:
             self.color = "orange"
-        elif t >= 65:
+        elif t >= tsp2:
             self.color = "red"
 
     def check_temp(self):
