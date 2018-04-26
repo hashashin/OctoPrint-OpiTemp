@@ -12,10 +12,12 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                     octoprint.plugin.AssetPlugin,
                     octoprint.plugin.TemplatePlugin):
     temp = 0
+    color = "black"
 
     def get_settings_defaults(self):
         return dict(rate="10.0",
-                    emoji="&#127818;")
+                    emoji="&#127818;",
+                    color=self.color)
 
     def interval(self):
         return float(self._settings.get(["rate"]))
@@ -31,6 +33,15 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                 dict(type="settings", custom_bindings=False)
         ]
 
+    def set_text_color(self):
+        t = float(self.temp)
+        if t < 51:
+            self.color = "green"
+        elif t >= 51 and t < 65:
+            self.color = "orange"
+        elif t >= 65:
+            self.color = "red"
+
     def check_temp(self):
         from sarge import run, Capture
         try:
@@ -45,8 +56,9 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
             else :
                 self._logger.warning("OpiTemp: unknown kernel version!")
                 self.temp = 0
+            self.set_text_color()
             self._plugin_manager.send_plugin_message(self._identifier,
-                                                     dict(soctemp=self.temp,emoji=self._settings.get(["emoji"]))
+                                                     dict(soctemp=self.temp,emoji=self._settings.get(["emoji"]),color=self.color)
                                                     )
             self._logger.debug("OpiTemp REFRESH")
         except Exception as e:
