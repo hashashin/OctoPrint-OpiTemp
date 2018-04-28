@@ -1,11 +1,11 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-import octoprint.plugin
 import sys
 import re
-from octoprint.util import RepeatedTimer
 import platform
+import octoprint.plugin
+from octoprint.util import RepeatedTimer
 
 class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                     octoprint.plugin.StartupPlugin,
@@ -31,14 +31,17 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
 
     def get_template_configs(self):
         return [
-                dict(type="navbar", custom_bindings=True),
-                dict(type="settings", custom_bindings=False)
+            dict(type="navbar", custom_bindings=True),
+            dict(type="settings", custom_bindings=False)
         ]
 
     def set_text_color(self):
         t = float(self.temp)
-        tsp1= float(self._settings.get(["tsp1"]))
-        tsp2= float(self._settings.get(["tsp2"]))
+        tsp1 = float(self._settings.get(["tsp1"]))
+        tsp2 = float(self._settings.get(["tsp2"]))
+        if tsp1 == 0 or tsp2 == 0:
+            self.color = "inherit"
+            return
         if t < tsp1:
             self.color = "green"
         elif t >= tsp1 and t < tsp2:
@@ -51,18 +54,21 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
         try:
             p = run("cat /etc/armbianmonitor/datasources/soctemp", stdout=Capture())
             p = p.stdout.text
-            match = re.search('(\d+)', p)
+            match = re.search(r'(\d+)', p)
             # lazy fix for #3, yeah I known...
             if platform.release().startswith("4"):
                 self.temp = "{0:.1f}".format(float(match.group(1))/1000)
             elif platform.release().startswith("3"):
                 self.temp = match.group(1)
-            else :
+            else:
                 self._logger.warning("OpiTemp: unknown kernel version!")
                 self.temp = 0
             self.set_text_color()
             self._plugin_manager.send_plugin_message(self._identifier,
-                                                     dict(soctemp=self.temp,emoji=self._settings.get(["emoji"]),color=self.color)
+                                                     dict(soctemp=self.temp,
+                                                          emoji=self._settings.get(["emoji"]),
+                                                          color=self.color
+                                                         )
                                                     )
             self._logger.debug("OpiTemp REFRESH")
         except Exception as e:
@@ -97,6 +103,6 @@ def __plugin_load__():
 
     global __plugin_hooks__
     __plugin_hooks__ = {
-        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+        "octoprint.plugin.softwareupdate.check_config":
+            __plugin_implementation__.get_update_information
     }
-

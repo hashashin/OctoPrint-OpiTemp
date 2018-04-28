@@ -9,7 +9,7 @@
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.emoji"><span class="help-inline">HTML emoji code to use as icon.</span>
+            <input type="text" data-bind="value: settings.plugins.opitemp.emoji"><span class="help-inline">HTML emoji code to use as icon. Also accepts plain text or any html.</span>
         </div>
     </div>
 </form>
@@ -25,7 +25,8 @@
     <div class="control-group">
         <div class="controls">
             <input type="text" data-bind="value: settings.plugins.opitemp.tsp2"><span class="help-inline">Temperature adobe this value it's considered NOT OK=>red color.</span>
+            <h6 style="color:red;" class="help-inline">"0" (zero) disables color alltogether.</h6>
         </div>
-        <h6 class="help-inline">Anything in between those values it's showed in orange color.</h6>
+    <h7 class="help-inline">Anything in between those values it's showed in orange color.</h6>
     </div>
 </form>
