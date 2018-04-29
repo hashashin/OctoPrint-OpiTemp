@@ -2,7 +2,7 @@
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.rate"><span class="help-inline">Refresh rate in seconds.</span>
+            <input type="number" data-bind="value: settings.plugins.opitemp.rate"><span class="help-inline">Refresh rate in seconds.</span>
         </div>
     </div>
 </form>
@@ -13,18 +13,18 @@
         </div>
     </div>
 </form>
-<h4 class="help-inline">Threshold config</h4>
+<h4 class="help-inline">Color threshold config</h4>
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.tsp1"><span class="help-inline">Temperature below this value it's considered OK=>green color.</span>
+            <input type="number" step="0.1" data-bind="value: settings.plugins.opitemp.tsp1"><span class="help-inline">Temperature below this value it's considered OK=>green color.</span>
         </div>
     </div>
 </form>
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.tsp2"><span class="help-inline">Temperature adobe this value it's considered NOT OK=>red color.</span>
+            <input type="number" step="0.1" data-bind="value: settings.plugins.opitemp.tsp2"><span class="help-inline">Temperature above this value it's considered NOT OK=>red color.</span>
             <h6 style="color:red;" class="help-inline">"0" (zero) disables color alltogether.</h6>
         </div>
     <h7 class="help-inline">Anything in between those values it's showed in orange color.</h6>
