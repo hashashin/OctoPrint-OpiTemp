@@ -15,14 +15,13 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
     color = "black"
 
     def get_settings_defaults(self):
-        return dict(rate="10.0",
+        return dict(rate=10.0,
                     emoji="&#127818;",
-                    color=self.color,
                     tsp1=50,
                     tsp2=65)
 
     def interval(self):
-        return float(self._settings.get(["rate"]))
+        return float(self._settings.get(['rate']))
 
     def on_after_startup(self):
         t = RepeatedTimer(self.interval, self.check_temp)
@@ -31,30 +30,37 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
 
     def get_template_configs(self):
         return [
-            dict(type="navbar", custom_bindings=True),
-            dict(type="settings", custom_bindings=False)
+            dict(type='navbar', custom_bindings=True),
+            dict(type='settings', custom_bindings=False)
         ]
 
     def set_text_color(self):
-        t = float(self.temp)
-        tsp1 = float(self._settings.get(["tsp1"]))
-        tsp2 = float(self._settings.get(["tsp2"]))
+        atemp = float(self.temp)
+        tsp1 = float(self._settings.get(['tsp1']))
+        tsp2 = float(self._settings.get(['tsp2']))
         if tsp1 == 0 or tsp2 == 0:
             self.color = "inherit"
             return
-        if t < tsp1:
+        if atemp < tsp1:
             self.color = "green"
-        elif t >= tsp1 and t < tsp2:
+        elif atemp >= tsp1 and atemp < tsp2:
             self.color = "orange"
-        elif t >= tsp2:
+        elif atemp >= tsp2:
             self.color = "red"
 
     def check_temp(self):
         from sarge import run, Capture
+        import os.path
         try:
-            p = run("cat /etc/armbianmonitor/datasources/soctemp", stdout=Capture())
-            p = p.stdout.text
-            match = re.search(r'(\d+)', p)
+            soc_file = "/etc/armbianmonitor/datasources/soctemp"
+            if os.path.isfile(soc_file):
+                p = run("cat " + soc_file, stdout=Capture())
+                p = p.stdout.text
+                match = re.search(r"(\d+)", p)
+            else:
+                self._logger.error("OpiTemp: can't determine the temperature,"
+                                   + " are you sure you're using Armbian?")
+                return
             # lazy fix for #3, yeah I known...
             if platform.release().startswith("4"):
                 self.temp = "{0:.1f}".format(float(match.group(1))/1000)
@@ -72,7 +78,7 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                                                     )
             self._logger.debug("OpiTemp REFRESH")
         except Exception as e:
-            self._logger.warning("OpiTemp REFRESH FAILED: %s" % e)
+            self._logger.warning("OpiTemp REFRESH FAILED: {0}".format(e))
 
     def get_assets(self):
         return dict(
