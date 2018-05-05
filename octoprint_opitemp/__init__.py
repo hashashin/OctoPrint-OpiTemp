@@ -18,7 +18,8 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
         return dict(rate=10.0,
                     emoji="&#127818;",
                     tsp1=50,
-                    tsp2=65)
+                    tsp2=65,
+                    socfile="/etc/armbianmonitor/datasources/soctemp")
 
     def interval(self):
         return float(self._settings.get(['rate']))
@@ -52,7 +53,7 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
         from sarge import run, Capture
         import os.path
         try:
-            soc_file = "/etc/armbianmonitor/datasources/soctemp"
+            soc_file = self._settings.get(["socfile"])
             if os.path.isfile(soc_file):
                 p = run("cat " + soc_file, stdout=Capture())
                 p = p.stdout.text

@@ -1,32 +1,44 @@
-<h4 class="help-inline">Basic config</h4>
+<h4 class="help-inline">{{ _('Basic config') }}</h4>
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="number" data-bind="value: settings.plugins.opitemp.rate"><span class="help-inline">Refresh rate in seconds.</span>
+            <input type="number" data-bind="value: settings.plugins.opitemp.rate">
+            <span class="help-inline">{{ _('Refresh rate in seconds.') }}</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <input type="text" data-bind="value: settings.plugins.opitemp.emoji">
+            <span class="help-inline">{{ _('HTML emoji code to use as icon. Also accepts plain text or any html.') }}</span>
         </div>
     </div>
 </form>
+<h4 class="help-inline">{{ _('Color threshold config') }}</h4>
 <form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="text" data-bind="value: settings.plugins.opitemp.emoji"><span class="help-inline">HTML emoji code to use as icon. Also accepts plain text or any html.</span>
+            <input type="number" step="0.1" data-bind="value: settings.plugins.opitemp.tsp1">
+            <span class="help-inline">{{ _('Temperature below this value it\'s considered OK=>green color.') }}</span>
         </div>
     </div>
-</form>
-<h4 class="help-inline">Color threshold config</h4>
-<form class="form-horizontal">
     <div class="control-group">
         <div class="controls">
-            <input type="number" step="0.1" data-bind="value: settings.plugins.opitemp.tsp1"><span class="help-inline">Temperature below this value it's considered OK=>green color.</span>
+            <input type="number" step="0.1" data-bind="value: settings.plugins.opitemp.tsp2">
+            <span class="help-inline">{{ _('Temperature above this value it\'s considered NOT OK=>red color.') }}</span>
+            <h6 style="color:red;" class="help-inline">{{ _('"0" (zero) disables color alltogether.') }}</h6>
         </div>
+    <h7 class="help-inline">{{ _('Anything in between those values it\'s showed in orange color.') }}</h6>
     </div>
-</form>
-<form class="form-horizontal">
-    <div class="control-group">
-        <div class="controls">
-            <input type="number" step="0.1" data-bind="value: settings.plugins.opitemp.tsp2"><span class="help-inline">Temperature above this value it's considered NOT OK=>red color.</span>
-            <h6 style="color:red;" class="help-inline">"0" (zero) disables color alltogether.</h6>
+    <div>
+        <div><small><a href="#" class="muted" data-bind="toggleContent: { class: 'fa-caret-right fa-caret-down', container: '#settings_plugin_opitemp .hide' }">
+        <i class="fa fa-caret-right"></i> {{ _('Advanced options') }}</a></small></div>
+        <div class="hide">
+            <div class="control-group">
+                <div class="controls">
+                    <input type="text" class="input" data-bind="value: settings.plugins.opitemp.socfile">
+                    <span class="help-inline">{{ _('Custom file to read temperature from') }}</span>
+                </div>
+            </div>
         </div>
-    <h7 class="help-inline">Anything in between those values it's showed in orange color.</h6>
     </div>
 </form>
