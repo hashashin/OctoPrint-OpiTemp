@@ -63,7 +63,7 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
                                    + " are you sure you're using Armbian?")
                 return
             # lazy fix for #3, yeah I known...
-            if platform.release().startswith("4"):
+            if platform.release().startswith("4") or platform.release().startswith("5"):
                 self.temp = "{0:.1f}".format(float(match.group(1))/1000)
             elif platform.release().startswith("3"):
                 self.temp = match.group(1)
