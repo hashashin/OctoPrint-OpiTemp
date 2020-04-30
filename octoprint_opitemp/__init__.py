@@ -1,7 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-import sys
 import re
 import platform
 import octoprint.plugin
@@ -102,6 +101,7 @@ class OpitempPlugin(octoprint.plugin.SettingsPlugin,
         )
 
 
+__plugin_pythoncompat__ = ">=2.7,<4"
 __plugin_name__ = "Opitemp Plugin"
 
 def __plugin_load__():
